@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Emotion Recognition Studio</title>
+    <meta name="description" content="Advanced AI-powered facial emotion recognition with real-time analysis">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>EmotionAI</span>
+            </div>
+            <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">AI-Powered</span> Emotion Recognition
+                </h1>
+                <p class="hero-subtitle">
+                    Experience advanced facial emotion detection with real-time analysis and stunning visualizations
+                </p>
+            </div>
+        </section>
+
+        <!-- Camera Section -->
+        <section class="camera-section">
+            <div class="camera-container">
+                <div class="camera-wrapper">
+                    <div class="camera-view">
+                        <video id="video" autoplay muted playsinline></video>
+                        <canvas id="overlay"></canvas>
+                        <div class="camera-overlay">
+                            <div class="face-indicator" id="faceIndicator">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Detecting face...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="emotion-display">
+                        <div class="emotion-card">
+                            <div class="emotion-icon" id="emotionIcon">
+                                <i class="fas fa-smile"></i>
+                            </div>
+                            <div class="emotion-info">
+                                <h3 id="emotionName">Ready</h3>
+                                <p id="emotionConfidence">0%</p>
+                            </div>
+                        </div>
+                        
+                        <div class="emotion-details">
+                            <div class="emotion-bar">
+                                <div class="emotion-progress" id="emotionProgress"></div>
+                            </div>
+                            <p id="emotionDescription">Position your face in the camera frame</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <button class="control-btn primary" id="startBtn">
+                        <i class="fas fa-play"></i>
+                        Start Detection
+                    </button>
+                    <button class="control-btn secondary" id="stopBtn" disabled>
+                        <i class="fas fa-stop"></i>
+                        Stop Detection
+                    </button>
+                    <button class="control-btn tertiary" id="captureBtn" disabled>
+                        <i class="fas fa-camera"></i>
+                        Capture
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <h2>Emotion Analytics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalDetections">0</h3>
+                            <p>Total Detections</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="sessionTime">00:00</h3>
+                            <p>Session Time</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="accuracyRate">95%</h3>
+                            <p>Accuracy Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emotion Timeline -->
+        <section class="timeline-section">
+            <div class="timeline-container">
+                <h2>Emotion Timeline</h2>
+                <div class="timeline-chart" id="timelineChart">
+                    <canvas id="emotionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-container">
+                <h2>Analyze Photos</h2>
+                <div class="upload-zone" id="uploadZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drop your photo here or <span>browse</span></p>
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                </div>
+                <div class="upload-preview" id="uploadPreview" style="display: none;">
+                    <img id="previewImage" alt="Preview">
+                    <div class="upload-results" id="uploadResults"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Detection Sensitivity</label>
+                    <input type="range" id="sensitivitySlider" min="0.5" max="0.95" step="0.05" value="0.75">
+                    <span id="sensitivityValue">75%</span>
+                </div>
+                <div class="setting-group">
+                    <label>Auto-save Results</label>
+                    <input type="checkbox" id="autoSave" checked>
+                </div>
+                <div class="setting-group">
+                    <label>Show Age/Gender</label>
+                    <input type="checkbox" id="showAgeGender">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/emotion-engine.js"></script>
+    <script src="js/ui-controller.js"></script>
+</body>
+</html>
